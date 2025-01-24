@@ -1,0 +1,60 @@
+@font-face {
+  font-family: 'Dodo Rounded v2';
+  src: url('../fonts/DodoRounded_v2-Light.woff2') format('woff2'),
+       url('../fonts/DodoRounded_v2-Light.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+$main-fonts: 'Dodo Rounded v2';
+
+.pizzaCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 8px;
+  margin: 0 0 60px ;
+  max-width: 305px;
+  height: auto;
+  flex: 1 1 calc(25% - 20px);
+}
+
+.pizzaCard__image {
+  display: flex;
+  justify-content: center;
+  width: 280px;
+  height: auto;
+  margin: 10px 0 0 10px;
+  margin-bottom: 8px;
+}
+
+.pizzaCard__name {
+  font-family: $main-fonts;
+  font-size: 20px;
+  color: #333;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.pizzaCard__description {
+  font-family: $main-fonts;
+  font-size: 15px;
+  color: #777;
+  // margin-bottom: 8px;
+}
+
+.pizzaCard__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding: 0 10px 0 10px;
+}
+
+.pizzaCard__price {
+  font-family: $main-fonts;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+

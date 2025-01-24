@@ -1,0 +1,95 @@
+@font-face {
+    font-family: 'Dodo Rounded v2';
+    src: url('../fonts/DodoRounded_v2-Light.woff2') format('woff2'),
+         url('../fonts/DodoRounded_v2-Light.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+  $transition-base-color: color 0.3s ease;
+  $main-fonts: 'Dodo Rounded v2';
+  $secondary-color: #FF6900;
+  $transition-base: background-color 0.3s ease;
+  $radius: 9999px;
+  $fontSize-button: 16px;
+  $paddingButton: 8px 20px;
+
+
+  .buttonLog{
+    position: relative;
+    padding: $paddingButton;
+    font-size: $fontSize-button;
+    background-color: rgb(243, 243, 247);
+    color: rgb(92, 99, 112);
+    border: none;
+    border-radius: $radius;
+    cursor: pointer;
+    transition: $transition-base-color;
+    font-weight:600;
+    font-family: $main-fonts;
+    &:hover{
+        color:black
+    }
+  }
+
+  .buttonBasket{
+    position: relative;
+    height: 40px;
+    padding: $paddingButton;
+    font-size: $fontSize-button;
+    line-height: 24px;
+    min-width: 90px;
+    background-color: $secondary-color;
+    border: none;
+    border-radius: $radius;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+    transition: $transition-base;
+    font-weight:500;
+    font-family: $main-fonts;
+    transition: $transition-base;
+    &:hover{
+        background-color: #E86100;
+    }
+  
+  }
+
+  .buttonChoose{
+    height: auto;
+    min-height: 40px;
+    max-width: 60%;
+    min-width: 120px;
+    overflow-wrap: wrap;
+    padding: $paddingButton;
+    font-size: $fontSize-button;
+    color: rgb(209, 87, 0);
+    border: none;
+    border-radius: $radius;
+    text-align: center;
+    font-family: $main-fonts;
+    font-weight: 600;
+    position: relative;
+    cursor: pointer;
+    transition: $transition-base;
+    background-color: rgba(255, 209, 178, 0.39);
+    &:hover{
+      background-color: #FFD2B3;
+    }
+
+  }
+
+  .ButtonAcceptPizza{
+    background-color: $secondary-color;
+    float: right;
+    transition: $transition-base;
+    cursor: pointer;
+    border: none;
+    border-radius: $radius;
+    padding: $paddingButton;
+    color: white;
+    font-family: $main-fonts;
+    font-size: $fontSize-button;
+    &:hover{
+        background-color: #E86100;
+    }
+  }

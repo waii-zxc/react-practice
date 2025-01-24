@@ -6,29 +6,63 @@
     font-style: normal;
   }
   $main-fonts: 'Dodo Rounded v2';
-
+  $secondary-color: #FF6900;
+  $transition-base: color 0.3s ease;
 
   .bunner{
     display: flex;
+    justify-content: space-between;
+    margin: 0 301px;
+    padding: 24px 0px 16px;
+    width: 1280px;
+    height: 84px;
+    // gap:200px;
+  .right{
+    font-family: $main-fonts;
+    display: flex;
     position: relative;
-    margin: 0 126px;
-    padding: 24px 170px 16px;
-    width: 715px;
-    height: 94px;
     align-items: center;
     top: -10px;
-    .size {
-        width: 250px;
+  }
+  .left{
+    font-family: $main-fonts;
+    display: flex;
+    position: relative;
+    align-items: center;
+    top: -10px;
+    .logo {
+        width: 200px;
         height: 90px;
+    }
+    .sizeSection{
+      width: 200px;
+      padding-left: 36px;
     }
     .txt{
         position: relative;
-        display: flex;
-        width: 139px;
+        display: inline-block;
         height: 21.59px;
-        font-family: $main-fonts;
         font-weight: bold;
-        
+        margin: 3px 0px;
+        padding: 0 5px;
+        gap: 10px;
+        &:nth-child(2) {
+          color: #ABABAB;
+          font-weight: 500;
+        }
+    }
+    .city{
+      position: relative;
+      display: inline-block;
+      justify-content: space-around;
+      color: $secondary-color;
+      font-weight: bold;
+      cursor: pointer;
+      transition: $transition-base;
+      &:hover{
+        color: #E86100;
+      }
     }
   }
-
+  }
+  

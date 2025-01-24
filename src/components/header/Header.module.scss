@@ -10,8 +10,9 @@ $main-fonts: 'Dodo Rounded v2';
 $primary-color: #FFFFFF;
 $secondary-color: #E86100;
 $black-color: black;
-$spacing: 0 299px 10px;
+$spacing: 0 299px;
 $border-radius: 5px;
+$transition-base: color 0.3s ease;
 
 .header {
   display: flex;
@@ -43,7 +44,7 @@ $border-radius: 5px;
   text-decoration: none;
   font-weight: bold;
   font-family: $main-fonts;
-  transition: color 0.3s ease;
+  transition: $transition-base;
   font-weight: 0;
    &:hover{
     color: $secondary-color
