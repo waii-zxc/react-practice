@@ -1,99 +1,115 @@
-@font-face {
-  font-family: 'Dodo Rounded v2';
-  src: url('../fonts/DodoRounded_v2-Light.woff2') format('woff2'),
-       url('../fonts/DodoRounded_v2-Light.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
-
-$main-fonts: 'Dodo Rounded v2';
-$primary-color: #FFFFFF;
-$secondary-color: #E86100;
-$spacing: 301px;
-$border-radius: 5px;
-$transition-base: color 0.3s ease;
+@import '../../styles/styles.module.scss';
 
 .list {
-  margin: 0 $spacing;
+  margin: 0 auto;
   display: flex;
-  justify-content: space-between;
   font-family: $main-fonts;
   font-weight: bold;
-  width: 1265px;
- 
+  max-width: 100%;
+
   ul {
-      margin: 0;
-      list-style: none;
-      display: flex;
-      gap: 20px;
-      padding: 0;
-      font-size: smaller;
-      align-items: center;
-      position: relative;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 2px;
+    font-size: smaller;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    justify-content: space-between;
+
+    li {
+      cursor: pointer;
+
+      a {
+        color: black;
+        text-decoration: none;
+        transition: $transition-base;
+
+        &:hover {
+          color: $secondary-color;
+        }
+      }
+
+      .other {
+        display: flex;
+        padding: 7px 12px;
+        background-color: rgb(243, 243, 247);
+        border-radius: 40px;
+        font-size: 13.33px;
+        cursor: pointer;
+        transition: $transition-base;
+        align-items: center;
+
+        &:hover {
+          color: $secondary-color;
+        }
+      }
+
+      &:hover > .dropdownList {
+        display: block;
+      }
+    }
+
+    .dropdownList {
+      font-family: $secondary-color;
+      background-color: white;
+      z-index: 20;
+      position: absolute;
+      display: none;
+      width: 130px;
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      gap: 10px;
+      transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
+
+      &.visible {
+        display: block;
+        opacity: 1;
+        z-index: 10;
+      }
 
       li {
-          cursor: pointer;
+        margin: 0;
+        padding: 7px 5px;
+        font-size: larger;
 
-          a {
-              color: black;
-              text-decoration: none;
-              transition: $transition-base;
+        a {
+          font-weight: bold;
 
-              &:hover {
-                  color: $secondary-color;
-              }
+          &:hover {
+            color: #ff6900;
           }
+        }
+      }
+    }
+  }
+}
 
-          .other {
-              display: flex;
-              padding: 7px 12px;
-              background-color: rgb(243, 243, 247);
-              border-radius: 40px;
-              font-size: 13.33px;
-              cursor: pointer;
-              transition: $transition-base;
-              align-items: center;
-              gap:10px;
+@media (max-width: 768px) {
+  .list {
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem;
 
-              &:hover {
-                  color: $secondary-color;
-              }
-          }
+    ul {
+      justify-content: center;
+      gap: 10px;
 
-          &:hover > .dropdownList {
-              display: block;
-          }
+      li {
+        font-size: 0.9rem;
+
+        .other {
+          font-size: 0.8rem;
+        }
       }
 
       .dropdownList {
-          font-family: $secondary-color;
-          z-index: 10;
-          position:absolute;
-          display: none;
-          width: 130px;
-          border-radius: 10px;
-          padding: 10px;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-          gap: 10px;
-        //   opacity: 1;
-          transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
-
-          &.visible {
-            display: block;
-            opacity: 1;
-          }
-
-          li {
-              margin: 0;
-              padding: 7px 5px;
-              font-size: larger;
-              a {
-                  font-weight: bold;
-                  &:hover {
-                      color: #ff6900;
-                  }
-              }
-          }
+        position: relative;
+        width: 100%;
       }
+    }
   }
 }

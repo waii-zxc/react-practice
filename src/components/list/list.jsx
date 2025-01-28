@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import styles from "./List.module.scss";
-import ButtonBasket from "../button/buttonBasket";
+import Button from "../button/button";
+import Styles from '../button/Button.module.scss'
 import { SlArrowDown } from "react-icons/sl";
 
-export default function List() {
+export default function List({ toggleBasket }) { // Передаем функцию toggleBasket как пропс
   const [isOpen, setIsOpen] = useState(false);
 
   const handleMouseEnter = () => {
@@ -43,10 +44,10 @@ export default function List() {
           </div>
         </li>
         <li><a>Акции</a></li>
+        <div className={styles.ButtonBasket}>
+          <Button className={Styles.buttonBasket} text="Корзина" onClick={toggleBasket} /> 
+        </div>
       </ul>
-      <div className={styles.ButtonBasket}>
-        <ButtonBasket />
-      </div>
     </div>
   );
 }

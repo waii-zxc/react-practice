@@ -1,0 +1,18 @@
+@font-face {
+    font-family: 'Dodo Rounded v2';
+    src: url('../components/fonts/DodoRounded_v2-Light.woff2') format('woff2'),
+    url('../components/fonts/DodoRounded_v2-Light.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+$main-fonts: 'Dodo Rounded v2';
+$transition-base-color: color 0.3s ease;
+  $secondary-color: #FF6900;
+  $transition-base: background-color 0.3s ease;
+  $radius: 16px;
+  $fontSize-button: 16px;
+  $paddingButton: 8px 20px;
+  // $padding: 0 190px;
+  $primary-color: #FFFFFF;
+  $black-color: black;
