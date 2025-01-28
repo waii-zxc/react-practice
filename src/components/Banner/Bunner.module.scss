@@ -1,18 +1,10 @@
-@font-face {
-    font-family: 'Dodo Rounded v2';
-    src: url('../fonts/DodoRounded_v2-Light.woff2') format('woff2'),
-         url('../fonts/DodoRounded_v2-Light.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-  }
-  $main-fonts: 'Dodo Rounded v2';
-  $secondary-color: #FF6900;
-  $transition-base: color 0.3s ease;
+@import '../../styles/styles.module.scss';
+
 
   .bunner{
     display: flex;
     justify-content: space-between;
-    margin: 0 301px;
+    // margin: 0 301px;
     padding: 24px 0px 16px;
     width: 1280px;
     height: 84px;
@@ -35,7 +27,7 @@
         height: 90px;
     }
     .sizeSection{
-      width: 200px;
+      width: 220px;
       padding-left: 36px;
     }
     .txt{
@@ -58,6 +50,7 @@
       color: $secondary-color;
       font-weight: bold;
       cursor: pointer;
+      margin: 0;
       transition: $transition-base;
       &:hover{
         color: #E86100;
@@ -66,3 +59,29 @@
   }
   }
   
+  .profileSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+
+    .profilePicture {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+
+    .ButtonLog {
+      background-color: #ff4500;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  }
+
+ 
+

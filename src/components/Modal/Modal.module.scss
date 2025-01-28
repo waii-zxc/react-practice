@@ -1,57 +1,90 @@
-@font-face {
-    font-family: 'Dodo Rounded v2';
-    src: url('../fonts/DodoRounded_v2-Light.woff2') format('woff2'),
-    url('../fonts/DodoRounded_v2-Light.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
+@import '../../styles/styles.module.scss';
 
-$main-fonts: 'Dodo Rounded v2';
 
 .modalBackdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    
-    
-    .modalContent {
-        font-family: $main-fonts;
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 10px;
-        position: relative;
-        z-index: 1001;
-        max-width: 824px;
-        p{
-            font-family: $main-fonts;
-        }
-
-        .info{
-            display: grid;
-            justify-items: start;
-            float: right;
-            width: 400px;
-            font-size: 14px;
-        }
-        
-        .modalImage {
-          width: 400px;
-          height: auto;
-        }
-        
-    .closeButton {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
-  }
-  
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 10;
 }
+
+.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+.modalContent {
+  font-family: $main-fonts;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  position: relative;
+  width: 600px;
+
+  img{
+    width: 300px;
+  }
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.region{
+  font-family: $main-fonts;
+  cursor: pointer;
+  transition: $transition-base-color;
+  width: 80px;
+  padding: 6px;
+  font-weight: 600;
+  &:hover{
+    color: $secondary-color;
+  }
+}
+.regForm {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; 
+  padding: 12px;
+  width: 160px;
+
+  h2{
+    margin: 0;
+  }
+
+ div {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input {
+  padding: 10px;
+  margin-bottom: 6px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+}
+
+.authLinks{
+  button{
+    
+  }
 }

@@ -1,17 +1,4 @@
-@font-face {
-    font-family: 'Dodo Rounded v2';
-    src: url('../fonts/DodoRounded_v2-Light.woff2') format('woff2'),
-         url('../fonts/DodoRounded_v2-Light.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-  }
-  $transition-base-color: color 0.3s ease;
-  $main-fonts: 'Dodo Rounded v2';
-  $secondary-color: #FF6900;
-  $transition-base: background-color 0.3s ease;
-  $radius: 9999px;
-  $fontSize-button: 16px;
-  $paddingButton: 8px 20px;
+@import '../../styles/styles.module.scss';
 
 
   .buttonLog{
@@ -92,4 +79,40 @@
     &:hover{
         background-color: #E86100;
     }
+  }
+
+  .ButtonReg{
+    background-color: $secondary-color;
+    float: right;
+    transition: $transition-base;
+    cursor: pointer;
+    border: none;
+    border-radius: $radius;
+    padding: $paddingButton;
+    color: white;
+    font-family: $main-fonts;
+    font-size: $fontSize-button;
+    font-weight: 600;
+    &:hover{
+        background-color: #E86100;
+    }
+  
+  }
+  
+  .ButtonSwap {
+    position: relative;
+    padding: $paddingButton;
+    font-size: $fontSize-button;
+    background-color: rgb(243, 243, 247);
+    color: rgb(92, 99, 112);
+    border: none;
+    border-radius: $radius;
+    cursor: pointer;
+    transition: $transition-base-color;
+    font-weight:600;
+    font-family: $main-fonts;
+    &:hover{
+        color:black
+    }
+
   }
