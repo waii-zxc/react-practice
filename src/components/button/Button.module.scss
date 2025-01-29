@@ -11,7 +11,7 @@
     border-radius: $radius;
     cursor: pointer;
     transition: $transition-base-color;
-    font-weight:600;
+    font-weight: $bold;
     font-family: $main-fonts;
     &:hover{
         color:black
@@ -36,7 +36,7 @@
     font-family: $main-fonts;
     transition: $transition-base;
     &:hover{
-        background-color: #E86100;
+        background-color: $hover-secondary-color;
     }
   
   }
@@ -49,12 +49,12 @@
     overflow-wrap: wrap;
     padding: $paddingButton;
     font-size: $fontSize-button;
-    color: rgb(209, 87, 0);
+    color: $secondary-color;
     border: none;
     border-radius: $radius;
     text-align: center;
     font-family: $main-fonts;
-    font-weight: 600;
+    font-weight:  $bold;
     position: relative;
     cursor: pointer;
     transition: $transition-base;
@@ -77,7 +77,7 @@
     font-family: $main-fonts;
     font-size: $fontSize-button;
     &:hover{
-        background-color: #E86100;
+        background-color:  $hover-secondary-color;
     }
   }
 
@@ -92,9 +92,9 @@
     color: white;
     font-family: $main-fonts;
     font-size: $fontSize-button;
-    font-weight: 600;
+    font-weight:  $bold;
     &:hover{
-        background-color: #E86100;
+        background-color:  $hover-secondary-color;
     }
   
   }
@@ -109,10 +109,26 @@
     border-radius: $radius;
     cursor: pointer;
     transition: $transition-base-color;
-    font-weight:600;
+    font-weight: $bold;
     font-family: $main-fonts;
     &:hover{
         color:black
     }
+  }
 
+  .clearButton{
+    background-color: $secondary-color;
+    transition: $transition-base;
+    cursor: pointer;
+    border: none;
+    border-radius: $radius;
+    padding: $paddingButton;
+    color: white;
+    font-family: $main-fonts;
+    font-size: $fontSize-button;
+    font-weight:  $bold;
+    margin-bottom: 24px;
+    &:hover{
+        background-color: $hover-secondary-color;
+    }
   }

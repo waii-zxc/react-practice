@@ -37,14 +37,22 @@ const saveBasketToFirestore = async (items) => {
 
 
 const clearBasketInFirestore = async () => {
+  const user = auth.currentUser;
+
+  if (user) {
     try {
-        await updateDoc(doc(db, "baskets", "userBasket"), {
-            items: deleteField()
-        });
+      await updateDoc(doc(db, "baskets", user.uid), {
+        items: deleteField()
+      });
+      console.log("Корзина успешно очищена в Firestore.");
     } catch (e) {
-        console.error("Error clearing basket in Firestore: ", e);
+      console.error("Ошибка при очистке корзины в Firestore: ", e);
     }
+  } else {
+    console.error("Пользователь не авторизован.");
+  }
 };
+
 
 const getBasketFromFirestore = async () => {
   const user = auth.currentUser;

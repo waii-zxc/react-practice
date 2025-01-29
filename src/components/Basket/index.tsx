@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styles from './index.module.scss';
-import {  clearBasketInFirestore, getBasketFromFirestore } from '../../firebase';
+import { clearBasketInFirestore, getBasketFromFirestore } from '../../firebase';
+import Button from '../button/button';
+import Styles from '../button/Button.module.scss'
 
 const Basket = ({ isOpen, closeBasket, initialItems = [] }) => {
   const [basketItems, setBasketItems] = useState(initialItems);
@@ -32,10 +34,11 @@ const Basket = ({ isOpen, closeBasket, initialItems = [] }) => {
     <div className={`${styles.overlay} ${isOpen ? styles.open : ''}`} onClick={closeBasket}>
       <div className={`${styles.basket} ${isOpen ? styles.open : ''}`} onClick={(e) => e.stopPropagation()}>
         <h2>Корзина</h2>
-        <button className={styles.closeButton} onClick={closeBasket}>×</button>
+        <Button className={styles.closeButton} onClick={closeBasket} text={'×'}> </Button>
         {basketItems.length === 0 ? (
           <p>Здесь будут отображаться добавленные товары.</p>
         ) : (
+          <div className={styles.basketItems}>
           <ul>
             {basketItems.map((item, index) => (
               <li key={index}>
@@ -47,8 +50,9 @@ const Basket = ({ isOpen, closeBasket, initialItems = [] }) => {
               </li>
             ))}
           </ul>
+          </div>
         )}
-        <button onClick={handleClearBasket} className={styles.clearButton}>Очистить</button>
+        <Button onClick={handleClearBasket} className={Styles.clearButton} text={'Очистить'}> </Button>
       </div>
     </div>
   );
