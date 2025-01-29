@@ -41,9 +41,18 @@ const Modal = ({ active, closeModal, initialContentType, content, regions }: Mod
     if (content) {
       const newItems = [...basketItems, content];
       setBasketItems(newItems);
+
       console.log("Сохраняем новые данные корзины:", newItems); 
       await saveBasketToFirestore(newItems);
     }
+  };
+
+  const handleAuthSuccess = () => {
+    closeModal(); 
+  };
+
+  const handleRegistrationSuccess = () => {
+    closeModal(); 
   };
 
   const renderContent = () => {
@@ -64,9 +73,9 @@ const Modal = ({ active, closeModal, initialContentType, content, regions }: Mod
     if (contentType === 'registration') {
       return (
         <div>
-          <RegistrationForm />
+          <RegistrationForm onSuccess={handleRegistrationSuccess} />
           <div className={styles.authLinks}>
-            <button className={buttonStyles.ButtonSwap} onClick={() => setContentType('authorization')}>Авторизация</button>
+            <Button className={buttonStyles.ButtonSwap} onClick={() => setContentType('authorization')} text={'Авторизация'}></Button>
           </div>
         </div>
       );
@@ -74,9 +83,9 @@ const Modal = ({ active, closeModal, initialContentType, content, regions }: Mod
     if (contentType === 'authorization') {
       return (
         <div>
-          <AuthorizationForm />
+          <AuthorizationForm onSuccess={handleAuthSuccess} />
           <div className={styles.authLinks}>
-            <button className={buttonStyles.ButtonSwap} onClick={() => setContentType('registration')}>Регистрация</button>
+            <Button className={buttonStyles.ButtonSwap} onClick={() => setContentType('registration')} text={'Регистрация'}></Button>
           </div>
         </div>
       );

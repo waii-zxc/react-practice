@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import styles from "./Bunner.module.scss";
 import Button from "../button/button";
 import buttonStyles from '../button/Button.module.scss';
-import { auth } from '../../firebase'; 
+import { auth, db } from '../../firebase'; 
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import Modal from "../Modal/modal"
+import { doc, setDoc, getDoc } from 'firebase/firestore';
+import Modal from "../Modal/modal";
 
 export default function Bunner() {
   const [showLogout, setShowLogout] = useState(false);
@@ -14,21 +15,46 @@ export default function Bunner() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      console.log("Текущий пользователь:", currentUser);
       setUser(currentUser);
+      if (currentUser) {
+        const userDoc = doc(db, "usersRegion", currentUser.uid);
+        try {
+          const userSnapshot = await getDoc(userDoc);
+          if (userSnapshot.exists()) {
+            console.log("Документ пользователя найден:", userSnapshot.data());
+            setSelectedRegion(userSnapshot.data().region || "Витебск");
+          } else {
+            console.log("Документ пользователя не найден.");
+          }
+        } catch (error) {
+          console.error("Ошибка при получении документа пользователя:", error);
+        }
+      }
     });
-
+  
     return () => unsubscribe();
   }, []);
+  
 
   const handleOpenModal = (type) => {
     setModalContentType(type);
     setShowModal(true);
   };
 
-  const handleCloseModal = (region) => {
+  const handleCloseModal = async (region) => {
     if (region && modalContentType === "regions") {
       setSelectedRegion(region);
+      if (user) {
+        const userDoc = doc(db, "usersRegion", user.uid);
+        try {
+          await setDoc(userDoc, { region: region }, { merge: true });
+          console.log("Регион успешно сохранен в Firestore.");
+        } catch (error) {
+          console.error("Ошибка при сохранении региона в Firestore:", error);
+        }
+      }
     }
     setShowModal(false);
   };

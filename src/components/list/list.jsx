@@ -4,7 +4,7 @@ import Button from "../button/button";
 import Styles from '../button/Button.module.scss'
 import { SlArrowDown } from "react-icons/sl";
 
-export default function List({ toggleBasket }) { // Передаем функцию toggleBasket как пропс
+export default function List({ toggleBasket }) { 
   const [isOpen, setIsOpen] = useState(false);
 
   const handleMouseEnter = () => {

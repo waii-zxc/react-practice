@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import styles from './index.module.scss';
 import Button from '../button/button';
 import buttonStyles from '../button/Button.module.scss';
-import { auth } from '../../firebase' // путь к вашему файлу firebase.js
+import { auth } from '../../firebase'; // путь к вашему файлу firebase.js
 import { createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from 'firebase/auth';
 
-const RegistrationForm = () => {
+const RegistrationForm = ({ onSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -14,16 +14,17 @@ const RegistrationForm = () => {
     event.preventDefault();
     console.log('Handle registration called');
     try {
- 
       const signInMethods = await fetchSignInMethodsForEmail(auth, email);
       if (signInMethods.length > 0) {
         setError('Пользователь с таким email уже существует');
         return;
       }
 
-      
       await createUserWithEmailAndPassword(auth, email, password);
       alert('Регистрация успешна!');
+      if (onSuccess) {
+        onSuccess(); // Вызов функции onSuccess при успешной регистрации
+      }
     } catch (error) {
       setError(error.message);
       console.error('Error during registration', error);

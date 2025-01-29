@@ -48,7 +48,7 @@
   transition: $transition-base-color;
   width: 80px;
   padding: 6px;
-  font-weight: 600;
+  font-weight: $bold;
   &:hover{
     color: $secondary-color;
   }
@@ -83,8 +83,3 @@ input {
 }
 }
 
-.authLinks{
-  button{
-    
-  }
-}
