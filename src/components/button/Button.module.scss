@@ -3,7 +3,7 @@
 
   .buttonLog{
     position: relative;
-    padding: $paddingButton;
+    padding: 0 10px;
     font-size: $fontSize-button;
     background-color: rgb(243, 243, 247);
     color: rgb(92, 99, 112);
@@ -14,6 +14,7 @@
     font-weight: $bold;
     font-family: $main-fonts;
     &:hover{
+        
         color:black
     }
   }
@@ -132,3 +133,46 @@
         background-color: $hover-secondary-color;
     }
   }
+
+  .closeButton {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    transition: transform 0.5s ease ; 
+  
+    &:hover {
+      transform: rotate(180deg); 
+    }
+  }
+
+  .deleteCard {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    padding: 0;
+    height: auto;
+    min-height: 40px;
+    max-width: 50%;
+    min-width: 100px;
+    overflow-wrap: wrap;
+    font-size: $fontSize-button;
+    color: $secondary-color;
+    border: none;
+    border-radius: $radius;
+    text-align: center;
+    font-family: $main-fonts;
+    font-weight: $bold;
+    position: relative;
+    cursor: pointer;
+    transition: $transition-base;
+    background-color: rgba(255, 209, 178, 0.39);
+  
+    &:hover {
+      background-color: #FFD2B3;
+    }
+  }
+  

@@ -5,18 +5,18 @@
   top: 0;
   left: 0;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.5); 
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  justify-content: flex-end; 
+  justify-content: flex-end;
   z-index: 999;
-  transition: opacity 0.3s ease-in-out; 
+  transition: opacity 0.3s ease-in-out;
   opacity: 0;
   pointer-events: none;
-}
 
-.overlay.open {
-  opacity: 1;
-  pointer-events: auto;
+  &.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
 }
 
 .basket {
@@ -29,28 +29,31 @@
   padding: 1rem;
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
   z-index: 1000;
-  transition: transform 0.3s ease-in-out; 
-  transform: translateX(100%); 
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(100%);
+
   &.open {
-    transform: translateX(0); 
+    transform: translateX(0);
   }
 
-  // h2 {
-  //   margin-bottom: 1rem;
-  // }
+  h3 {
+    margin: 0rem;
+  }
 
-  img{
+  img {
     width: 140px;
+  }
+
+  p {
+    margin: 6px 0;
   }
 }
 
 .closeButton {
-  position: absolute;
   top: 10px;
   right: 10px;
   background: none;
   border: none;
-  font-size: 1.5rem;
   cursor: pointer;
   color: #000;
 
@@ -60,13 +63,54 @@
 }
 
 .basketItems {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid lightgray;
-  border-radius: 16px;
-  
-  li{
+
+  .item {
     list-style: none;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid lightgray;
+    border-radius: 16px;
+    margin-bottom: 6px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .basketImage {
+    width: 140px;
+  }
+
+  .deleteCard {
+    justify-content: center;
+    padding: 0;
+    height: auto;
+    min-height: 40px;
+    max-width: 60%;
+    min-width: 120px;
+    font-size: $fontSize-button;
+    color: $secondary-color;
+    border: none;
+    border-radius: $radius;
+    text-align: center;
+    font-family: $main-fonts;
+    font-weight: $bold;
+    cursor: pointer;
+    transition: $transition-base;
+    background-color: rgba(255, 209, 178, 0.39);
+
+    &:hover {
+      background-color: #FFD2B3;
+    }
+  }
+
+  .clearButton {
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 745px) {
+  .basket {
+    width: 50%;
   }
 }

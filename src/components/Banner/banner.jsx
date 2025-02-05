@@ -1,59 +1,84 @@
 import React, { useState, useEffect } from "react";
-import styles from "./Bunner.module.scss";
+import { useSelector, useDispatch } from 'react-redux';
+import styles from "./Banner.module.scss";
 import Button from "../button/button";
-import buttonStyles from '../button/Button.module.scss';
-import { auth, db } from '../../firebase'; 
+import { auth, db, transferGuestBasket } from '../../firebase'; 
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc } from 'firebase/firestore';  
+import { setUser, setSelectedRegion } from '../store/Slicer/userSlice';
 import Modal from "../Modal/modal";
 
-export default function Bunner() {
+export default function Banner() {
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.user.currentUser);
+  const selectedRegion = useSelector((state) => state.user.selectedRegion);
   const [showLogout, setShowLogout] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalContentType, setModalContentType] = useState("regions");
-  const [selectedRegion, setSelectedRegion] = useState("Витебск");
-  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      console.log("Текущий пользователь:", currentUser);
-      setUser(currentUser);
-      if (currentUser) {
-        const userDoc = doc(db, "usersRegion", currentUser.uid);
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      console.log("Текущий пользователь:", user);
+      if (user) {
+        const { uid, email, displayName } = user;
+        dispatch(setUser({ uid, email, displayName }));
+
+        await transferGuestBasket(uid);
+
+        const userDoc = doc(db, "usersRegion", uid);
         try {
           const userSnapshot = await getDoc(userDoc);
           if (userSnapshot.exists()) {
             console.log("Документ пользователя найден:", userSnapshot.data());
-            setSelectedRegion(userSnapshot.data().region || "Витебск");
+            dispatch(setSelectedRegion(userSnapshot.data().region || "Витебск"));
           } else {
-            console.log("Документ пользователя не найден.");
+            console.log("Документ пользователя не найден. Создание документа...");
+            // Создаем документ с выбранным регионом
+            await setDoc(userDoc, { region: "Витебск" });
+            dispatch(setSelectedRegion("Витебск"));
           }
         } catch (error) {
-          console.error("Ошибка при получении документа пользователя:", error);
+          console.error("Ошибка при получении или создании документа пользователя:", error);
+        }
+      } else {
+        dispatch(setUser(null));
+        console.log("Пользователь не авторизован.");
+        
+        // Загружаем регион для гостя из локального хранилища
+        const savedRegion = localStorage.getItem("guestRegion");
+        if (savedRegion) {
+          dispatch(setSelectedRegion(savedRegion));
+        } else {
+          // Устанавливаем регион по умолчанию для гостей, если он не сохранен
+          dispatch(setSelectedRegion("Витебск"));
         }
       }
     });
-  
+
     return () => unsubscribe();
-  }, []);
-  
+  }, [dispatch]);
 
   const handleOpenModal = (type) => {
+    console.log("Открытие модального окна для типа:", type);
     setModalContentType(type);
     setShowModal(true);
   };
 
   const handleCloseModal = async (region) => {
-    if (region && modalContentType === "regions") {
-      setSelectedRegion(region);
-      if (user) {
-        const userDoc = doc(db, "usersRegion", user.uid);
+    // Добавьте проверку, чтобы избежать передачи события
+    if (region && typeof region === 'string' && modalContentType === "regions") {
+      dispatch(setSelectedRegion(region));
+      if (currentUser) {
+        const userDoc = doc(db, "usersRegion", currentUser.uid);
         try {
           await setDoc(userDoc, { region: region }, { merge: true });
           console.log("Регион успешно сохранен в Firestore.");
         } catch (error) {
           console.error("Ошибка при сохранении региона в Firestore:", error);
         }
+      } else {
+        // Сохраняем регион для гостя в локальное хранилище
+        localStorage.setItem("guestRegion", region);
       }
     }
     setShowModal(false);
@@ -71,6 +96,8 @@ export default function Bunner() {
     { name: "Могилев" },
     { name: "Брест" }
   ];
+
+  console.log("Текущий регион:", selectedRegion);
 
   return (
     <>
@@ -90,18 +117,19 @@ export default function Bunner() {
           </div>
         </div>
         <div className={styles.right}>
-          {!user ? (
-            <Button className={buttonStyles.buttonLog} text="Войти" onClick={() => handleOpenModal("registration")} />
+          {!currentUser ? (
+            <Button className="buttonLog" text="Войти" onClick={() => handleOpenModal("registration")} />
           ) : (
             <div className={styles.profileSection}>
-              <img
-                className={styles.profilePicture}
-                src="https://th.bing.com/th/id/OIP.Os3dloCTc-JUqOagtZOXVAHaHr?w=198&h=205&c=7&r=0&o=5&pid=1.7" alt="Profile"
-                onClick={handleProfileClick}
-              />
-              {showLogout && (
-                <Button className={buttonStyles.ButtonSwap} text="Выйти" onClick={() => signOut(auth)} />
-              )}
+              <div className={styles.profilePictureWrapper}>
+                <img
+                  className={styles.profilePicture}
+                  src="https://th.bing.com/th/id/OIP.Os3dloCTc-JUqOagtZOXVAHaHr?w=198&h=205&c=7&r=0&o=5&pid=1.7"
+                  alt="Profile"
+                  onClick={handleProfileClick}
+                />
+              </div>
+              <Button className="buttonLog" text="Выйти" onClick={() => signOut(auth)} />
             </div>
           )}
         </div>
