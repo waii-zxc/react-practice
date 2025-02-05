@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styles from './index.module.scss';
 import Button from '../button/button';
-import buttonStyles from '../button/Button.module.scss';
-import { auth } from '../../firebase'; // путь к вашему файлу firebase.js
+import InputField from '../inputs/inputField';
+import { auth } from '../../firebase'; 
 import { createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from 'firebase/auth';
 
 const RegistrationForm = ({ onSuccess }) => {
@@ -23,7 +23,7 @@ const RegistrationForm = ({ onSuccess }) => {
       await createUserWithEmailAndPassword(auth, email, password);
       alert('Регистрация успешна!');
       if (onSuccess) {
-        onSuccess(); // Вызов функции onSuccess при успешной регистрации
+        onSuccess();
       }
     } catch (error) {
       setError(error.message);
@@ -35,30 +35,24 @@ const RegistrationForm = ({ onSuccess }) => {
     <div className={styles.regForm}>
       <h2>Регистрация</h2>
       <form className={styles.registrationForm} onSubmit={handleRegistration}>
-        <div>
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Пароль</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
+        <InputField
+          id="email"
+          label="Email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <InputField
+          id="password"
+          label="Пароль"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
         {error && <p>{error}</p>}
-        <Button className={buttonStyles.ButtonReg} type="submit" text="Зарегистрироваться" />
+        <Button className="ButtonReg" type="submit" text="Зарегистрироваться"  />
       </form>
     </div>
   );
