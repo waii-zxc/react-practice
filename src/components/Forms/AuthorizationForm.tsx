@@ -2,18 +2,31 @@ import React, { useState, useEffect } from 'react';
 import styles from './index.module.scss';
 import Button from '../button/button';
 import InputField from '../inputs/inputField';
-import { auth } from '../../firebase'; 
+import { auth, db } from '../../firebase'; 
 import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 
 const AuthorizationForm = ({ onSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
+      if (currentUser) {
+        const userDoc = await getDoc(doc(db, 'users', currentUser.email));
+        if (userDoc.exists()) {
+          const isAdmin = userDoc.data().admin || false;
+          setIsAdmin(isAdmin);
+
+          if (isAdmin) {
+            alert('Вы являетесь администратором.');
+          }
+        }
+      }
     });
 
     return () => unsubscribe();
@@ -33,9 +46,14 @@ const AuthorizationForm = ({ onSuccess }) => {
     }
   };
 
-  if (user) {
-    return null;
-  }
+  // if (user) {
+  //   return (
+  //     <div>
+  //       <h2>Добро пожаловать, {user.email}</h2>
+  //       {isAdmin && <p>Вы являетесь администратором.</p>}
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className={styles.authForm}>

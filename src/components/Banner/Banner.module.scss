@@ -24,7 +24,12 @@
 
     .logo {
       width: 200px;
+      cursor: pointer;
       // height: 90px;
+      transition: transform 0.3s;
+      &:hover {
+        transform: translateY(-5px);
+      }
     }
 
     .sizeSection {

@@ -2,14 +2,14 @@ import React from 'react';
 import Header from '../header/header';
 import Footer from '../footer/Footer';
 import styles from './index.module.scss';
-// import List from '../navbar/navbar';
+import { Outlet } from 'react-router-dom';
 
-const Layout = ({ children }) => {
+const Layout = () => {
   return (
     <div className={styles.Layout}>
       <Header />
       <main className={styles.mainContainer}>
-        {children}
+        <Outlet />
       </main>
       <Footer />
     </div>
