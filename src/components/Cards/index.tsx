@@ -43,7 +43,6 @@ const fetchCardsByCategory = async (category: string): Promise<CardItemProps[]> 
       Object.keys(data).forEach((key) => {
         if (key !== 'category') { 
           const product = data[key];
-          // console.log('Продукт:', product); 
           fetchedCards.push({ id: doc.id + "_" + key, category, ...product });
         }
       });
@@ -65,52 +64,63 @@ interface CardSectionProps {
   onClick: (image: string, name: string, description: string, price: number, category: string) => void;
 }
 
-const CardSection: React.FC<CardSectionProps> = ({ title, cards, onClick }) => (
-  <>
-    <h2 id={title.toLowerCase().replace(/\s+/g, '-')} className={styles.section_title}>{title} </h2>
-    
-    <div className={styles.cardContainer}>
-      {cards.map(card => (
-        <CardItem key={card.id} {...card} onClick={onClick} />
-      ))}
-    </div>
-  </>
-);
-
-export const Cards: React.FC<{ onClick: (image: string, name: string, description: string, price: number, category: string) => void }> = ({ onClick }) => {
-  const [newCards, setNewCards] = useState<CardItemProps[]>([]);
-  const [discountedCards, setDiscountedCards] = useState<CardItemProps[]>([]);
-  const [coffeeCards, setCoffeeCards] = useState<CardItemProps[]>([]);
-  const [comboCards, setComboCards] = useState<CardItemProps[]>([]);
-
-
-  useEffect(() => {
-    const loadCards = async () => {
-      const [newCardsData, discountedCardsData, coffeeCardsData,comboCardsData] = await Promise.all([
-        fetchCardsByCategory("новинки"),
-        fetchCardsByCategory("Сытные пиццы"),
-        fetchCardsByCategory("Кофе"),
-        fetchCardsByCategory("Комбо"),
-      ]);
-      // console.log('Загруженные данные новинки:', newCardsData);
-      // console.log('Загруженные данные сытные пиццы:', discountedCardsData);
-      // console.log('Загруженные данные кофе:', coffeeCardsData);
-      setNewCards(sortCardsByName(newCardsData));
-      setDiscountedCards(sortCardsByName(discountedCardsData));
-      setCoffeeCards(sortCardsByName(coffeeCardsData));
-      setComboCards(sortCardsByName(comboCardsData));
-    };
-
-    loadCards();
-  }, []);
+const CardSection: React.FC<CardSectionProps> = ({ title, cards, onClick }) => {
+  if (!title) {
+    return null;
+  }
 
   return (
     <>
-      <CardSection title="Новинки" cards={newCards} onClick={onClick} />
-      <CardSection title="Сытные пиццы" cards={discountedCards} onClick={onClick} />
-      <CardSection title="Комбо" cards={comboCards} onClick={onClick} />
-      <CardSection title="Кофе" cards={coffeeCards} onClick={onClick} />
+      <h2 id={title.toLowerCase().replace(/\s+/g, '-')} className={styles.section_title}>{title}</h2>
+      <div className={styles.cardContainer}>
+        {cards.map(card => (
+          <CardItem key={card.id} {...card} onClick={onClick} />
+        ))}
+      </div>
+    </>
+  );
+};
 
+export const Cards: React.FC<{ selectedCategory?: string, onClick: (image: string, name: string, description: string, price: number, category: string) => void }> = ({ selectedCategory, onClick }) => {
+  const [cards, setCards] = useState<CardItemProps[]>([]);
+
+  useEffect(() => {
+    const loadCards = async () => {
+      let fetchedCards = [];
+      if (selectedCategory) {
+        fetchedCards = await fetchCardsByCategory(selectedCategory);
+      } else {
+        const [newCardsData, discountedCardsData, coffeeCardsData, comboCardsData] = await Promise.all([
+          fetchCardsByCategory("новинки"),
+          fetchCardsByCategory("Сытные пиццы"),
+          fetchCardsByCategory("Кофе"),
+          fetchCardsByCategory("Комбо"),
+        ]);
+        fetchedCards = [
+          ...newCardsData,
+          ...discountedCardsData,
+          ...coffeeCardsData,
+          ...comboCardsData,
+        ];
+      }
+      setCards(sortCardsByName(fetchedCards));
+    };
+
+    loadCards();
+  }, [selectedCategory]);
+
+  return (
+    <>
+      {selectedCategory ? (
+        <CardSection title={selectedCategory} cards={cards} onClick={onClick} />
+      ) : (
+        <>
+          <CardSection title="Новинки" cards={cards.filter(card => card.category === "новинки")} onClick={onClick} />
+          <CardSection title="Сытные пиццы" cards={cards.filter(card => card.category === "Сытные пиццы")} onClick={onClick} />
+          <CardSection title="Комбо" cards={cards.filter(card => card.category === "Комбо")} onClick={onClick} />
+          <CardSection title="Кофе" cards={cards.filter(card => card.category === "Кофе")} onClick={onClick} />
+        </>
+      )}
     </>
   );
 };

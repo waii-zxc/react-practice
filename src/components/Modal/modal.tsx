@@ -7,7 +7,6 @@ import AuthorizationContent from './modalСompanents/authorizationContent';
 import ProductContent from './modalСompanents/productContent';
 import { saveBasketToFirestore, getBasketFromFirestore } from '../../firebase';
 
-
 interface ModalProps {
   active: boolean;
   closeModal: (region?: string) => void;
@@ -24,6 +23,7 @@ interface ModalProps {
 const Modal: React.FC<ModalProps> = ({ active, closeModal, initialContentType, content, regions }) => {
   const [contentType, setContentType] = useState(initialContentType);
   const [basketItems, setBasketItems] = useState([]);
+  const [selectedRegion, setSelectedRegion] = useState('Витебск'); 
 
   useEffect(() => {
     setContentType(initialContentType);
@@ -43,29 +43,34 @@ const Modal: React.FC<ModalProps> = ({ active, closeModal, initialContentType, c
     if (content) {
       const newItems = [...basketItems, content];
       setBasketItems(newItems);
- 
-      console.log("Сохраняем новые данные корзины:", newItems); 
+
+      console.log("Сохраняем новые данные корзины:", newItems);
       await saveBasketToFirestore(newItems);
     }
   };
 
   const handleAuthSuccess = () => {
-    closeModal(); 
+    closeModal();
   };
 
   const handleRegistrationSuccess = () => {
-    closeModal(); 
+    closeModal();
+  };
+
+  const handleRegionSelect = (region: string) => {
+    setSelectedRegion(region);
+    closeModal(region);
   };
 
   const renderContent = () => {
     if (contentType === 'regions' && regions) {
       return (
-        <RegionsContent regions={regions} closeModal={closeModal} />
+        <RegionsContent regions={regions} closeModal={handleRegionSelect} />
       );
     }
     if (contentType === 'registration') {
       return (
-        <RegistrationContent setContentType={setContentType} handleRegistrationSuccess={handleRegistrationSuccess} />
+        <RegistrationContent setContentType={setContentType} handleRegistrationSuccess={handleRegistrationSuccess} region={selectedRegion} />
       );
     }
     if (contentType === 'authorization') {

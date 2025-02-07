@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import styles from './index.module.scss';
 import Button from '../button/button';
 import InputField from '../inputs/inputField';
-import { auth } from '../../firebase'; 
+import { auth, db } from '../../firebase';
 import { createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from 'firebase/auth';
+import { setDoc, doc } from 'firebase/firestore';
 
-const RegistrationForm = ({ onSuccess }) => {
+const RegistrationForm = ({ onSuccess, region }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
   const handleRegistration = async (event) => {
     event.preventDefault();
-    console.log('Handle registration called');
     try {
       const signInMethods = await fetchSignInMethodsForEmail(auth, email);
       if (signInMethods.length > 0) {
@@ -20,14 +20,24 @@ const RegistrationForm = ({ onSuccess }) => {
         return;
       }
 
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      await setDoc(doc(db, 'users', email), {
+        uid: user.uid,
+        email: user.email,
+        region: region || 'Витебск', 
+        createdAt: new Date(),
+        admin: false  
+      });
+
       alert('Регистрация успешна!');
       if (onSuccess) {
         onSuccess();
       }
     } catch (error) {
       setError(error.message);
-      console.error('Error during registration', error);
+      console.error('Ошибка при регистрации', error);
     }
   };
 
@@ -52,7 +62,7 @@ const RegistrationForm = ({ onSuccess }) => {
           required
         />
         {error && <p>{error}</p>}
-        <Button className="ButtonReg" type="submit" text="Зарегистрироваться"  />
+        <Button className="ButtonReg" type="submit" text="Зарегистрироваться" />
       </form>
     </div>
   );
