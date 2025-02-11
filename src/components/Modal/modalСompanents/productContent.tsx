@@ -20,7 +20,7 @@ const ProductContent: React.FC<ProductContentProps> = ({ content, handleAddToBas
         <h2>{content.name}</h2>
         <p>{content.description}</p>
         <Button 
-          className="ButtonAcceptPizza" 
+          className="ButtonAccept" 
           text={`В корзину за ${content.price} руб.`} 
           onClick={handleAddToBasket} 
         />

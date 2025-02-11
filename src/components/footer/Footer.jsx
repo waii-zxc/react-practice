@@ -5,11 +5,9 @@ const Footer = () => {
   return (
     <footer className={styles.footer}>
       <div className={styles.footerSection}>
-        <h4>Додо Пицца</h4>
+        <h4>Пицца</h4>
         <ul>
-          <li>О нас</li>
-          <li>Додо-книга</li>
-          <li>Блог «Сила ума»</li>
+        <li><a href="/about">О нас</a></li> 
         </ul>
       </div>
       <div className={styles.footerSection}>
@@ -18,20 +16,11 @@ const Footer = () => {
           <li>В пиццерии</li>
         </ul>
       </div>
-      <div className={styles.footerSection}>
-        <h4>Партнерам</h4>
-        <ul>
-          <li>Франшиза</li>
-          <li>Инвестиции</li>
-          <li>Поставщикам</li>
-          <li>Предложить помещение</li>
-        </ul>
-      </div>
+     
       <div className={styles.footerSection}>
         <h4>Это интересно</h4>
         <ul>
-          <li>Почему мы готовим без перчаток?</li>
-          <li>Экскурсии и мастер-классы</li>
+          <li><a href="/noGloves">Почему мы готовим без перчаток?</a></li>
         </ul>
       </div>
     </footer>

@@ -13,6 +13,7 @@
     transition: $transition-base-color;
     font-weight: $bold;
     font-family: $main-fonts;
+    margin-bottom: 6px;
     &:hover{
         
         color:black
@@ -66,7 +67,9 @@
 
   }
 
-  .ButtonAcceptPizza{
+
+
+  .ButtonAccept{
     background-color: $secondary-color;
     float: right;
     transition: $transition-base;
@@ -176,3 +179,28 @@
     }
   }
   
+
+  .buttonScrollToTop {
+    position: fixed;
+    bottom: 100px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background-color: $hover-secondary-color; 
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background-color 0.3s, width 0.3s, height 0.3s, font-size 0.3s;
+    
+    &:hover {
+    width: 55px;
+    height: 55px;
+    font-size: 1.1rem;
+    
+   }
+  }

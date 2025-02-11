@@ -107,7 +107,7 @@ export default function Banner() {
           <div>
             <img 
               className={styles.logo} 
-              src="https://animal-park.by/dodo.png" 
+              src="https://img.freepik.com/premium-vector/slice-pizza_24908-7023.jpg?w=826" 
               alt="Pizza" 
               onClick={() => navigate('/')} 
             />
@@ -136,7 +136,7 @@ export default function Banner() {
                 />
               </div>
               <Button className="buttonLog" text="Выйти" onClick={() => signOut(auth)} />
-              {isAdmin && <Button className="buttonAdmin" text="Администрирование" onClick={() => {
+              {isAdmin && <Button className="buttonLog" text="Администрирование" onClick={() => {
   try {
     navigate('/admin');
   } catch (error) {
