@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import styles from './Card.module.scss';
 import Button from '../button/button';
 import { db } from '../../firebase';
@@ -32,30 +32,12 @@ const CardItem: React.FC<CardItemProps> = ({ id, image, name, description, price
   );
 };
 
-const fetchCardsByCategory = async (category: string): Promise<CardItemProps[]> => {
-  try {
-    console.log(`Начинаем получение данных из Firestore для категории: ${category}...`);
-    const q = query(collection(db, "maps"), where("category", "==", category));
-    const querySnapshot = await getDocs(q);
-    const fetchedCards: CardItemProps[] = [];
-    querySnapshot.forEach((doc) => {
-      const data = doc.data() as any;
-      Object.keys(data).forEach((key) => {
-        if (key !== 'category') { 
-          const product = data[key];
-          fetchedCards.push({ id: doc.id + "_" + key, category, ...product });
-        }
-      });
-    });
-    return fetchedCards;
-  } catch (error) {
-    console.error(`Ошибка при получении данных из Firestore для категории ${category}:`, error);
-    return [];
-  }
-};
+const categoryOrder = ["новинки", "Сытные пиццы", "Пиццы", "Комбо", "Закуски", "Завтраки", "Коктейли", "Кофе", "Напитки"];
 
-const sortCardsByName = (cards: CardItemProps[]): CardItemProps[] => {
-  return cards.sort((a, b) => a.name.localeCompare(b.name));
+const sortCardsByTimestamp = (cards: CardItemProps[]): CardItemProps[] => {
+  return cards.sort((a, b) => {
+    return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
+  });
 };
 
 interface CardSectionProps {
@@ -83,30 +65,46 @@ const CardSection: React.FC<CardSectionProps> = ({ title, cards, onClick }) => {
 
 export const Cards: React.FC<{ selectedCategory?: string, onClick: (image: string, name: string, description: string, price: number, category: string) => void }> = ({ selectedCategory, onClick }) => {
   const [cards, setCards] = useState<CardItemProps[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
 
   useEffect(() => {
-    const loadCards = async () => {
-      let fetchedCards = [];
-      if (selectedCategory) {
-        fetchedCards = await fetchCardsByCategory(selectedCategory);
-      } else {
-        const [newCardsData, discountedCardsData, coffeeCardsData, comboCardsData] = await Promise.all([
-          fetchCardsByCategory("новинки"),
-          fetchCardsByCategory("Сытные пиццы"),
-          fetchCardsByCategory("Кофе"),
-          fetchCardsByCategory("Комбо"),
-        ]);
-        fetchedCards = [
-          ...newCardsData,
-          ...discountedCardsData,
-          ...coffeeCardsData,
-          ...comboCardsData,
-        ];
+    const loadCardsAndCategories = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "maps"));
+        const fetchedCategories = new Set<string>();
+        const fetchedCards = [];
+
+        querySnapshot.forEach((doc) => {
+          const data = doc.data() as any;
+          const category = data.category;
+          if (category) {
+            fetchedCategories.add(category);
+          }
+          Object.keys(data).forEach((key) => {
+            if (key !== 'category') {
+              const product = data[key];
+              fetchedCards.push({ id: doc.id + "_" + key, category, ...product });
+            }
+          });
+        });
+
+       
+        let categoriesArray = Array.from(fetchedCategories).sort((a, b) => {
+          const indexA = categoryOrder.indexOf(a);
+          const indexB = categoryOrder.indexOf(b);
+          if (indexA === -1) return 1; 
+          if (indexB === -1) return -1; 
+          return indexA - indexB;
+        });
+
+        setCategories(categoriesArray);
+        setCards(sortCardsByTimestamp(fetchedCards));
+      } catch (error) {
+        console.error("Ошибка при загрузке категорий и карт из Firestore: ", error);
       }
-      setCards(sortCardsByName(fetchedCards));
     };
 
-    loadCards();
+    loadCardsAndCategories();
   }, [selectedCategory]);
 
   return (
@@ -115,10 +113,9 @@ export const Cards: React.FC<{ selectedCategory?: string, onClick: (image: strin
         <CardSection title={selectedCategory} cards={cards} onClick={onClick} />
       ) : (
         <>
-          <CardSection title="Новинки" cards={cards.filter(card => card.category === "новинки")} onClick={onClick} />
-          <CardSection title="Сытные пиццы" cards={cards.filter(card => card.category === "Сытные пиццы")} onClick={onClick} />
-          <CardSection title="Комбо" cards={cards.filter(card => card.category === "Комбо")} onClick={onClick} />
-          <CardSection title="Кофе" cards={cards.filter(card => card.category === "Кофе")} onClick={onClick} />
+          {categories.map(category => (
+            <CardSection key={category} title={category} cards={cards.filter(card => card.category === category)} onClick={onClick} />
+          ))}
         </>
       )}
     </>

@@ -10,8 +10,10 @@ import Modal from './components/Modal/modal';
 import styles from './components/Cards/Card.module.scss';
 import RegistrationForm from './components/Forms/RegistrationForm';
 import AuthorizationForm from './components/Forms/AuthorizationForm';
-import AdminPage from './components/adminpage/adminPage';
-
+import AdminPage from './components/pages/adminpage/adminPage';
+import AboutUs from './components/pages/aboutUs/AboutUs'; 
+import NoGloves from './components/pages/noGloves/noGloves'; 
+import Contacts from './components/pages/contacts/contact';
 const MainContent = ({ handleCardClick, toggleBasket, modalActive, modalContentType, setModalActive, modalContent, isBasketOpen, handleOpenModal }) => (
   <>
     <Banner onOpenModal={handleOpenModal} />
@@ -66,6 +68,9 @@ const App = () => {
             <Route path="register" element={<RegistrationForm />} />
             <Route path="login" element={<AuthorizationForm />} />
             <Route path="admin" element={<AdminPage />} />
+            <Route path="about" element={<AboutUs />} /> 
+            <Route path="noGloves" element={<NoGloves />} />
+            <Route path="contact" element={<Contacts />} /> 
           </Route>
         </Routes>
       </div>
