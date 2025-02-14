@@ -7,7 +7,6 @@ import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import PropTypes from 'prop-types';
 
-
 const AuthorizationForm = ({ onSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -21,7 +20,7 @@ const AuthorizationForm = ({ onSuccess }) => {
           const isAdmin = userDoc.data().admin || false;
 
           if (isAdmin) {
-            // toast.info('Вы являетесь администратором.');
+            toast.info('Вы являетесь администратором.');
           }
         }
       }
@@ -34,13 +33,13 @@ const AuthorizationForm = ({ onSuccess }) => {
     event.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      // toast.success('Авторизация успешна!');
+      toast.success('Авторизация успешна!');
       if (onSuccess) {
         onSuccess();
       }
     } catch (error) {
       setError(error.message);
-      // toast.error(`Ошибка авторизации: ${error.message}`);
+      toast.error(`Ошибка авторизации: ${error.message}`);
       console.error('Error', error);
     }
   };

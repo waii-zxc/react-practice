@@ -17,6 +17,7 @@ import Contacts from './components/pages/contacts/contact';
 import ProductContent from './components/Modal/modalСompanents/productContent';
 
 
+
 const MainContent = ({ handleCardClick, toggleBasket, modalActive, modalContentType, setModalActive, modalContent, isBasketOpen, handleOpenModal }) => (
   <>
     <Banner onOpenModal={handleOpenModal} />
@@ -38,7 +39,6 @@ const MainContent = ({ handleCardClick, toggleBasket, modalActive, modalContentT
         />
       )}
     </Modal>
-    
   </>
 );
 

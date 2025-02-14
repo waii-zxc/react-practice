@@ -8,6 +8,7 @@ import { setDoc, doc } from 'firebase/firestore';
 // import { ToastContainer, toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
 
+
 const RegistrationForm = ({ onSuccess, region }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -34,15 +35,19 @@ const RegistrationForm = ({ onSuccess, region }) => {
         admin: false  
       });
 
+
      
       console.log('Уведомление об успешной регистрации отправлено'); 
+
+
+      alert('Регистрация успешна!');
 
       if (onSuccess) {
         onSuccess();
       }
     } catch (error) {
       setError(error.message);
-      // toast.error(`Ошибка при регистрации: ${error.message}`);
+      // toast.error(`Ошибка при регистрации: ${error.message}`)
       console.error('Ошибка при регистрации', error);
     }
   };
@@ -70,7 +75,7 @@ const RegistrationForm = ({ onSuccess, region }) => {
         {error && <p>{error}</p>}
         <Button className="ButtonReg" type="submit" text="Зарегистрироваться" />
       </form>
-      {/* <ToastContainer/> */}
+
     </div>
   );
 };
