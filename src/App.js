@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Layout from './components/Layout';
@@ -15,8 +15,11 @@ import AboutUs from './components/pages/aboutUs/AboutUs';
 import NoGloves from './components/pages/noGloves/noGloves';
 import Contacts from './components/pages/contacts/contact';
 import ProductContent from './components/Modal/modalСompanents/productContent';
-
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { auth, db } from './firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 
 const MainContent = ({ handleCardClick, toggleBasket, modalActive, modalContentType, setModalActive, modalContent, isBasketOpen, handleOpenModal }) => (
   <>
@@ -61,6 +64,23 @@ const App = () => {
     setModalActive(true);
   };
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser && currentUser.email) {
+        const userDoc = await getDoc(doc(db, 'users', currentUser.email));
+        if (userDoc.exists()) {
+          const isAdmin = userDoc.data().admin || false;
+
+          if (isAdmin) {
+            toast.info('Вы являетесь администратором.');
+          }
+        }
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   return (
     <Router>
       <div className="App">
@@ -84,6 +104,7 @@ const App = () => {
             <Route path="contact" element={<Contacts />} />
           </Route>
         </Routes>
+        <ToastContainer />
       </div>
     </Router>
   );
