@@ -109,4 +109,27 @@ const transferGuestBasket = async (userId) => {
   }
 };
 
+
+export const getCardFromFirestore = async (cardId: string, category: string) => {
+  if (!cardId || !category) {
+    throw new Error('Категория или ID не заданы'); // Вывод ошибки, если параметры не заданы
+  }
+
+  try {
+    const cardRef = firebase.firestore().collection('cards').doc(cardId);
+    const doc = await cardRef.get();
+    if (doc.exists) {
+      const cardData = doc.data();
+      console.log('Данные карты из Firebase:', cardData); // Логирование данных карты
+      return cardData;
+    } else {
+      console.log('Документ не найден!');
+      return null;
+    }
+  } catch (error) {
+    console.error('Ошибка при получении данных карты из Firebase:', error);
+    return null;
+  }
+}
+
 export { auth, db, saveBasketToFirestore, clearBasketInFirestore, getBasketFromFirestore, transferGuestBasket };

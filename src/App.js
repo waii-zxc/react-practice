@@ -11,9 +11,11 @@ import styles from './components/Cards/Card.module.scss';
 import RegistrationForm from './components/Forms/RegistrationForm';
 import AuthorizationForm from './components/Forms/AuthorizationForm';
 import AdminPage from './components/pages/adminpage/adminPage';
-import AboutUs from './components/pages/aboutUs/AboutUs'; 
-import NoGloves from './components/pages/noGloves/noGloves'; 
+import AboutUs from './components/pages/aboutUs/AboutUs';
+import NoGloves from './components/pages/noGloves/noGloves';
 import Contacts from './components/pages/contacts/contact';
+import ProductContent from './components/Modal/modalСompanents/productContent';
+
 const MainContent = ({ handleCardClick, toggleBasket, modalActive, modalContentType, setModalActive, modalContent, isBasketOpen, handleOpenModal }) => (
   <>
     <Banner onOpenModal={handleOpenModal} />
@@ -27,20 +29,27 @@ const MainContent = ({ handleCardClick, toggleBasket, modalActive, modalContentT
       closeModal={() => setModalActive(false)}
       contentType={modalContentType}
       content={modalContent}
-    />
+    >
+      {modalContentType === 'custom' && (
+        <ProductContent
+          content={modalContent}
+          handleAddToBasket={(item) => console.log('Добавлено в корзину:', item)}
+        />
+      )}
+    </Modal>
   </>
 );
 
 const App = () => {
   const [isBasketOpen, setIsBasketOpen] = useState(false);
   const [modalActive, setModalActive] = useState(false);
-  const [modalContent, setModalContent] = useState({ image: '', name: '', description: '', price: 0 });
+  const [modalContent, setModalContent] = useState({ id: '', image: '', name: '', description: '', price: 0, typeSettingVisible: false });
   const [modalContentType, setModalContentType] = useState('');
 
   const toggleBasket = () => setIsBasketOpen(!isBasketOpen);
 
-  const handleCardClick = (image, name, description, price) => {
-    setModalContent({ image, name, description, price });
+  const handleCardClick = (card) => {
+    setModalContent(card);
     setModalContentType('custom');
     setModalActive(true);
   };
@@ -68,9 +77,9 @@ const App = () => {
             <Route path="register" element={<RegistrationForm />} />
             <Route path="login" element={<AuthorizationForm />} />
             <Route path="admin" element={<AdminPage />} />
-            <Route path="about" element={<AboutUs />} /> 
+            <Route path="about" element={<AboutUs />} />
             <Route path="noGloves" element={<NoGloves />} />
-            <Route path="contact" element={<Contacts />} /> 
+            <Route path="contact" element={<Contacts />} />
           </Route>
         </Routes>
       </div>

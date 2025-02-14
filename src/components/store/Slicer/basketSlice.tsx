@@ -34,6 +34,10 @@ const basketSlice = createSlice({
   name: 'basket',
   initialState,
   reducers: {
+    addItem(state, action: PayloadAction<BasketItem>) {
+      state.items.push(action.payload);
+      saveBasketToFirestore(state.items);
+    },
     removeItem(state, action: PayloadAction<string>) {
       state.items = state.items.filter((item) => item.id !== action.payload);
       saveBasketToFirestore(state.items); 
@@ -52,5 +56,5 @@ const basketSlice = createSlice({
   },
 });
 
-export const { removeItem } = basketSlice.actions;
+export const { addItem, removeItem } = basketSlice.actions;
 export default basketSlice.reducer;
