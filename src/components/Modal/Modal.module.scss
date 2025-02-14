@@ -1,6 +1,5 @@
 @import '../../styles/styles.module.scss';
 
-
 .modalBackdrop {
   position: fixed;
   top: 0;
@@ -28,11 +27,15 @@
   padding: 20px;
   border-radius: 8px;
   position: relative;
-  width: 600px;
+  width: 90%;
+  max-width: 650px;
 
-  img{
+  img {
     width: 300px;
+    height: auto;
   }
+
+ 
 }
 
 .closeButton {
@@ -42,45 +45,70 @@
   cursor: pointer;
 }
 
-.region{
+.region {
   font-family: $main-fonts;
   cursor: pointer;
   transition: $transition-base-color;
   width: 80px;
   padding: 6px;
   font-weight: $bold;
-  &:hover{
+  &:hover {
     color: $secondary-color;
   }
 }
+
 .regForm {
   display: flex;
   flex-direction: column;
-  gap: 15px; 
+  gap: 15px;
   padding: 12px;
   width: 160px;
 
-  h2{
+  h2 {
     margin: 0;
   }
 
- div {
+  div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  label {
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+
+  input {
+    padding: 10px;
+    margin-bottom: 6px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+}
+
+.productContent {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 20px;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.details {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 }
 
-label {
-  margin-bottom: 5px;
+.info {
+  flex-grow: 1;
+}
+
+.currentPrice {
+  font-size: 18px;
   font-weight: bold;
+  margin-top: 10px;
 }
-
-input {
-  padding: 10px;
-  margin-bottom: 6px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-}
-}
-
-

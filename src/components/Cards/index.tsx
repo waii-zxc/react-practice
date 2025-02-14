@@ -11,10 +11,11 @@ interface CardItemProps {
   description: string;
   price: number;
   category: string;
-  onClick: (image: string, name: string, description: string, price: number, category: string) => void;
+  typeSettingVisible: boolean;
+  onClick: (card: CardItemProps) => void;
 }
 
-const CardItem: React.FC<CardItemProps> = ({ id, image, name, description, price, category, onClick }) => {
+const CardItem: React.FC<CardItemProps> = ({ id, image, name, description, price, category, typeSettingVisible, onClick }) => {
   return (
     <div key={id} className={styles.pizzaCard}>
       <img className={styles.pizzaPreview} src={image} alt={name} />
@@ -24,7 +25,7 @@ const CardItem: React.FC<CardItemProps> = ({ id, image, name, description, price
         <span className={styles.pizzaPrice}>от {price} руб.</span>
         <Button
           className="buttonChoose"
-          onClick={() => onClick(image, name, description, price, category)}
+          onClick={() => onClick({ id, image, name, description, price, category, typeSettingVisible })}
           text="Выбрать"
         />
       </div>
@@ -34,23 +35,13 @@ const CardItem: React.FC<CardItemProps> = ({ id, image, name, description, price
 
 const categoryOrder = ["новинки", "Сытные пиццы", "Пиццы", "Комбо", "Закуски", "Завтраки", "Коктейли", "Кофе", "Напитки"];
 
-const sortCardsByTimestamp = (cards: CardItemProps[]): CardItemProps[] => {
-  return cards.sort((a, b) => {
-    return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
-  });
-};
-
 interface CardSectionProps {
   title: string;
   cards: CardItemProps[];
-  onClick: (image: string, name: string, description: string, price: number, category: string) => void;
+  onClick: (card: CardItemProps) => void;
 }
 
 const CardSection: React.FC<CardSectionProps> = ({ title, cards, onClick }) => {
-  if (!title) {
-    return null;
-  }
-
   return (
     <>
       <h2 id={title.toLowerCase().replace(/\s+/g, '-')} className={styles.section_title}>{title}</h2>
@@ -63,7 +54,7 @@ const CardSection: React.FC<CardSectionProps> = ({ title, cards, onClick }) => {
   );
 };
 
-export const Cards: React.FC<{ selectedCategory?: string, onClick: (image: string, name: string, description: string, price: number, category: string) => void }> = ({ selectedCategory, onClick }) => {
+export const Cards: React.FC<{ selectedCategory?: string, onClick: (card: CardItemProps) => void }> = ({ selectedCategory, onClick }) => {
   const [cards, setCards] = useState<CardItemProps[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
 
@@ -83,12 +74,11 @@ export const Cards: React.FC<{ selectedCategory?: string, onClick: (image: strin
           Object.keys(data).forEach((key) => {
             if (key !== 'category') {
               const product = data[key];
-              fetchedCards.push({ id: doc.id + "_" + key, category, ...product });
+              fetchedCards.push({ id: doc.id + "-" + key, category, ...product });
             }
           });
         });
 
-       
         let categoriesArray = Array.from(fetchedCategories).sort((a, b) => {
           const indexA = categoryOrder.indexOf(a);
           const indexB = categoryOrder.indexOf(b);
@@ -98,7 +88,7 @@ export const Cards: React.FC<{ selectedCategory?: string, onClick: (image: strin
         });
 
         setCategories(categoriesArray);
-        setCards(sortCardsByTimestamp(fetchedCards));
+        setCards(fetchedCards);
       } catch (error) {
         console.error("Ошибка при загрузке категорий и карт из Firestore: ", error);
       }
@@ -110,7 +100,7 @@ export const Cards: React.FC<{ selectedCategory?: string, onClick: (image: strin
   return (
     <>
       {selectedCategory ? (
-        <CardSection title={selectedCategory} cards={cards} onClick={onClick} />
+        <CardSection title={selectedCategory} cards={cards.filter(card => card.category === selectedCategory)} onClick={onClick} />
       ) : (
         <>
           {categories.map(category => (

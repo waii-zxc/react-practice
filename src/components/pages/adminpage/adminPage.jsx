@@ -7,7 +7,7 @@ import Button from '../../button/button';
 
 const AdminPage = ({ handleOpenModal }) => {
   const [categories, setCategories] = useState([]);
-  const [newCategory, setNewCategory] = useState(''); 
+  const [newCategory, setNewCategory] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [cards, setCards] = useState([]);
   const [editingCardId, setEditingCardId] = useState(null);
@@ -19,6 +19,7 @@ const AdminPage = ({ handleOpenModal }) => {
     image: '',
     category: ''
   });
+  const [typeSettingsVisibility, setTypeSettingsVisibility] = useState({});
 
   useEffect(() => {
     const loadCategoriesAndCards = async () => {
@@ -27,15 +28,18 @@ const AdminPage = ({ handleOpenModal }) => {
       const fetchedCategories = new Set();
       const fetchedCards = [];
 
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
+      querySnapshot.forEach((docSnapshot) => {
+        const data = docSnapshot.data();
         const category = data.category;
         if (category) {
           fetchedCategories.add(category);
-          Object.keys(data).forEach(key => {
-            if (key !== "category") {
+          Object.keys(data).forEach((key) => {
+            if (key !== "category" && typeof data[key] === "object") {
+              if (data[key].typeSettingVisible === undefined) {
+                data[key].typeSettingVisible = false;
+              }
               const cardWithId = {
-                id: `${doc.id}-${key}`, 
+                id: `${docSnapshot.id}-${key}`,
                 category: category,
                 ...data[key]
               };
@@ -48,7 +52,7 @@ const AdminPage = ({ handleOpenModal }) => {
       console.log('Собранные категории:', Array.from(fetchedCategories));
       console.log('Карты с ID:', fetchedCards);
       setCategories([...fetchedCategories]);
-      setCards(fetchedCards); 
+      setCards(fetchedCards);
     };
     loadCategoriesAndCards();
   }, []);
@@ -60,28 +64,35 @@ const AdminPage = ({ handleOpenModal }) => {
   const handleEdit = (card) => {
     setEditingCardId(card.id);
     setEditedCard(card);
+    setTypeSettingsVisibility({ ...typeSettingsVisibility, [card.id]: !!card.typeSettingVisible });
   };
 
   const handleSave = async (updatedCard) => {
     try {
-      setCards(cards.map((card) => (card.id === updatedCard.id ? updatedCard : card)));
-      setEditingCardId(null);
-
-      const [docId, fieldKey] = updatedCard.id.split('-');
+      const updatedCardId = updatedCard.id;
+  
+      const hyphenIndex = updatedCardId.indexOf('-');
+  
+      const docId = updatedCardId.substring(0, hyphenIndex);
+      const fieldKey = updatedCardId.substring(hyphenIndex + 1);
+  
       const cardRef = doc(db, "maps", docId);
       await updateDoc(cardRef, {
         [`${fieldKey}.name`]: updatedCard.name,
         [`${fieldKey}.description`]: updatedCard.description,
         [`${fieldKey}.price`]: updatedCard.price,
-        [`${fieldKey}.image`]: updatedCard.image
+        [`${fieldKey}.image`]: updatedCard.image,
+        [`${fieldKey}.typeSettingVisible`]: !!typeSettingsVisibility[updatedCardId]
       });
-
+  
+      setCards(cards.map((card) => (card.id === updatedCard.id ? { ...updatedCard, typeSettingVisible: !!typeSettingsVisibility[updatedCard.id] } : card)));
+      setEditingCardId(null);
       console.log("Карточка успешно обновлена в Firestore.");
     } catch (e) {
       console.error("Ошибка при обновлении карточки в Firestore: ", e);
     }
   };
- 
+  
 
   const handleDelete = async (card) => {
     try {
@@ -113,16 +124,16 @@ const AdminPage = ({ handleOpenModal }) => {
       const cardKey = newCard.name.toLowerCase().replace(/\s+/g, '_');
       try {
         const categoryDocRef = doc(db, "maps", newCard.category);
-        await updateDoc(categoryDocRef, {
-          [cardKey]: {
-            name: newCard.name,
-            description: newCard.description,
-            price: newCard.price,
-            image: newCard.image,
-          }
-        });
-  
-        setCards([...cards, { id: `${newCard.category}-${cardKey}`, ...newCard }]);
+        const cardData = {
+          name: newCard.name,
+          description: newCard.description,
+          price: newCard.price,
+          image: newCard.image,
+          typeSettingVisible: false
+        };
+        await setDoc(categoryDocRef, { [cardKey]: cardData }, { merge: true });
+
+        setCards([...cards, { id: `${newCard.category}-${cardKey}`, ...newCard, typeSettingVisible: false }]);
         console.log("Новая карточка успешно добавлена в Firestore.");
         setNewCard({ name: '', description: '', price: '', image: '', category: '' });
       } catch (e) {
@@ -132,7 +143,6 @@ const AdminPage = ({ handleOpenModal }) => {
       console.error("Ошибка: не все поля заполнены.");
     }
   };
-  
 
   const handleAddNewCategory = async () => {
     if (newCategory) {
@@ -141,7 +151,7 @@ const AdminPage = ({ handleOpenModal }) => {
         await setDoc(categoryDocRef, {
           category: newCategory
         });
-  
+
         setCategories([...categories, newCategory]);
         console.log(`Новая категория "${newCategory}" успешно добавлена в Firestore.`);
         setNewCategory('');
@@ -151,10 +161,8 @@ const AdminPage = ({ handleOpenModal }) => {
     } else {
       console.error("Ошибка: название категории не может быть пустым.");
     }
-  }
+  };
 
-
-  
   const handleDeleteCategory = async (category) => {
     if (!category) {
       console.error("Ошибка: выберите категорию для удаления.");
@@ -164,20 +172,32 @@ const AdminPage = ({ handleOpenModal }) => {
     try {
       const q = query(collection(db, "maps"), where("category", "==", category));
       const querySnapshot = await getDocs(q);
-  
+
       querySnapshot.forEach(async (doc) => {
         await deleteDoc(doc.ref);
       });
-  
+
       setCategories(categories.filter((c) => c !== category));
       setCards(cards.filter((card) => card.category !== category));
-  
+
       console.log(`Категория "${category}" успешно удалена из Firestore.`);
     } catch (e) {
       console.error("Ошибка при удалении категории из Firestore: ", e);
     }
   };
 
+  const handleToggleTypeSetting = (cardId) => {
+    const newVisibility = !typeSettingsVisibility[cardId];
+    setTypeSettingsVisibility(prevState => ({
+      ...prevState,
+      [cardId]: newVisibility
+    }));
+    const updatedCard = cards.find(card => card.id === cardId);
+    if (updatedCard) {
+      updatedCard.typeSettingVisible = newVisibility;
+      setEditedCard(updatedCard); 
+    }
+  };
   return (
     <>
       <Banner onOpenModal={handleOpenModal} />
@@ -185,17 +205,16 @@ const AdminPage = ({ handleOpenModal }) => {
         <h1>Страница админа</h1>
         <h2>Добро пожаловать в панель админа!</h2>
         <p>Здесь вы можете создавать, изменять и удалять товары</p>
-
+  
         <label htmlFor="category-select">Выберите категорию:</label>
         <select id="category-select" value={selectedCategory} onChange={handleCategoryChange}>
-        <option value="">Выберите категорию</option>
-        {categories.map((category, index) => (
-        <option key={index} value={category}>{category}</option>
-         ))}
+          <option value="">Выберите категорию</option>
+          {categories.map((category, index) => (
+            <option key={index} value={category}>{category}</option>
+          ))}
         </select>
         <Button onClick={() => handleDeleteCategory(selectedCategory)} text="Удалить категорию" className="ButtonAccept" />
-
-
+  
         <div className={styles.cardGrid}>
           {selectedCategory && (
             cards.filter(card => card.category === selectedCategory).map((card) => (
@@ -226,6 +245,14 @@ const AdminPage = ({ handleOpenModal }) => {
                       value={editedCard.image}
                       onChange={handleInputChange}
                     />
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={!!typeSettingsVisibility[card.id]}
+                        onChange={() => handleToggleTypeSetting(card.id)}
+                      />
+                      Показать настройки типа
+                    </label>
                     <Button onClick={() => handleSave(editedCard)} text="сохранить" />
                   </>
                 ) : (
@@ -236,8 +263,8 @@ const AdminPage = ({ handleOpenModal }) => {
                     <div className={styles.bottomCont}>
                       <p className={styles.price}>{card.price} Руб</p>
                       <div className={styles.buttons}>
-                        <Button onClick={() => handleEdit(card)} text="Редактировать" className='buttonChoose'/>
-                        <Button onClick={() => handleDelete(card)} text="Удалить" className='buttonChoose'/>
+                        <Button onClick={() => handleEdit(card)} text="Редактировать" className='buttonChoose' />
+                        <Button onClick={() => handleDelete(card)} text="Удалить" className='buttonChoose' />
                       </div>
                     </div>
                   </>
@@ -246,7 +273,7 @@ const AdminPage = ({ handleOpenModal }) => {
             ))
           )}
         </div>
-
+  
         <div className={styles.newCardForm}>
           <h2>Добавить новую карту</h2>
           <input
@@ -281,11 +308,11 @@ const AdminPage = ({ handleOpenModal }) => {
             <option value="">Выберите категорию</option>
             {categories.map((category, index) => (
               <option key={index} value={category}>{category}</option>
-            ))} 
+            ))}
           </select>
-          <Button onClick={handleAddNewCard} text='Добавить карту' className='ButtonAccept' />
+          <Button onClick={handleAddNewCard} text="Добавить карту" className="ButtonAccept" />
         </div>
-
+  
         <div className={styles.newCategoryForm}>
           <h2>Добавить новую категорию</h2>
           <input
@@ -295,11 +322,12 @@ const AdminPage = ({ handleOpenModal }) => {
             value={newCategory}
             onChange={(e) => setNewCategory(e.target.value)}
           />
-          <Button onClick={handleAddNewCategory} text='Добавить категорию' className='ButtonAccept' />
+          <Button onClick={handleAddNewCategory} text="Добавить категорию" className="ButtonAccept" />
         </div>
       </div>
     </>
   );
-};
-
-export default AdminPage
+  };
+  
+  export default AdminPage;
+  
