@@ -1,0 +1,206 @@
+@import '../../styles/styles.module.scss';
+
+
+  .buttonLog{
+    position: relative;
+    padding: 0 10px;
+    font-size: $fontSize-button;
+    background-color: rgb(243, 243, 247);
+    color: rgb(92, 99, 112);
+    border: none;
+    border-radius: $radius;
+    cursor: pointer;
+    transition: $transition-base-color;
+    font-weight: $bold;
+    font-family: $main-fonts;
+    margin-bottom: 6px;
+    &:hover{
+        
+        color:black
+    }
+  }
+
+  .buttonBasket{
+    position: relative;
+    height: 40px;
+    padding: $paddingButton;
+    font-size: $fontSize-button;
+    line-height: 24px;
+    min-width: 90px;
+    background-color: $secondary-color;
+    border: none;
+    border-radius: $radius;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+    transition: $transition-base;
+    font-weight:500;
+    font-family: $main-fonts;
+    transition: $transition-base;
+    &:hover{
+        background-color: $hover-secondary-color;
+    }
+  
+  }
+
+  .buttonChoose{
+    height: auto;
+    min-height: 40px;
+    max-width: 60%;
+    min-width: 120px;
+    overflow-wrap: wrap;
+    padding: $paddingButton;
+    font-size: $fontSize-button;
+    color: $secondary-color;
+    border: none;
+    border-radius: $radius;
+    text-align: center;
+    font-family: $main-fonts;
+    font-weight:  $bold;
+    position: relative;
+    cursor: pointer;
+    transition: $transition-base;
+    background-color: rgba(255, 209, 178, 0.39);
+    &:hover{
+      background-color: #FFD2B3;
+    }
+
+  }
+
+
+
+  .ButtonAccept{
+    background-color: $secondary-color;
+    float: right;
+    transition: $transition-base;
+    cursor: pointer;
+    border: none;
+    border-radius: $radius;
+    padding: $paddingButton;
+    color: white;
+    font-family: $main-fonts;
+    font-size: $fontSize-button;
+    &:hover{
+        background-color:  $hover-secondary-color;
+    }
+  }
+
+  .ButtonReg{
+    background-color: $secondary-color;
+    float: right;
+    transition: $transition-base;
+    cursor: pointer;
+    border: none;
+    border-radius: $radius;
+    padding: $paddingButton;
+    color: white;
+    font-family: $main-fonts;
+    font-size: $fontSize-button;
+    font-weight:  $bold;
+    &:hover{
+        background-color:  $hover-secondary-color;
+    }
+  
+  }
+  
+  .ButtonSwap {
+    position: relative;
+    padding: $paddingButton;
+    font-size: $fontSize-button;
+    background-color: rgb(243, 243, 247);
+    color: rgb(92, 99, 112);
+    border: none;
+    border-radius: $radius;
+    cursor: pointer;
+    transition: $transition-base-color;
+    font-weight: $bold;
+    font-family: $main-fonts;
+    &:hover{
+        color:black
+    }
+  }
+
+  .clearButton{
+    background-color: $secondary-color;
+    transition: $transition-base;
+    cursor: pointer;
+    border: none;
+    border-radius: $radius;
+    padding: $paddingButton;
+    color: white;
+    font-family: $main-fonts;
+    font-size: $fontSize-button;
+    font-weight:  $bold;
+    margin-bottom: 24px;
+    &:hover{
+        background-color: $hover-secondary-color;
+    }
+  }
+
+  .closeButton {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    transition: transform 0.5s ease ; 
+  
+    &:hover {
+      transform: rotate(180deg); 
+    }
+  }
+
+  .deleteCard {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    padding: 0;
+    height: auto;
+    min-height: 40px;
+    max-width: 50%;
+    min-width: 100px;
+    overflow-wrap: wrap;
+    font-size: $fontSize-button;
+    color: $secondary-color;
+    border: none;
+    border-radius: $radius;
+    text-align: center;
+    font-family: $main-fonts;
+    font-weight: $bold;
+    position: relative;
+    cursor: pointer;
+    transition: $transition-base;
+    background-color: rgba(255, 209, 178, 0.39);
+  
+    &:hover {
+      background-color: #FFD2B3;
+    }
+  }
+  
+
+  .buttonScrollToTop {
+    position: fixed;
+    bottom: 100px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background-color: $hover-secondary-color; 
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background-color 0.3s, width 0.3s, height 0.3s, font-size 0.3s;
+    
+    &:hover {
+    width: 55px;
+    height: 55px;
+    font-size: 1.1rem;
+    
+   }
+  }

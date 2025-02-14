@@ -1,0 +1,63 @@
+.authForm, .regForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; 
+    padding: 12px;
+    width: 580px;
+  
+    h2 {
+      margin: 0;
+    }
+  
+    div {
+      display: flex;
+      flex-direction: column;
+    }
+  
+    label {
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+  
+    input {
+      padding: 10px;
+      margin-bottom: 6px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+  }
+  
+  
+  @media (max-width: 768px) {
+    .authForm, .regForm {
+      width: 100%;
+      padding: 8px;
+    }
+  
+    input {
+      padding: 8px;
+      font-size: 14px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .authForm, .regForm {
+      padding: 6px;
+      gap: 10px;
+    }
+  
+    input {
+      padding: 6px;
+      font-size: 12px;
+    }
+  
+    label {
+      font-size: 14px;
+    }
+  
+    h2 {
+      font-size: 18px;
+    }
+  }
+  

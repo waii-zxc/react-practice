@@ -1,0 +1,113 @@
+@import '../../../styles/styles.module.scss';
+
+.adminPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: $main-fonts;
+  
+  max-width: 100%;
+  padding: 20px;
+
+  .cardGrid {
+    padding: 24px 0;
+    width: 100px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+    gap: 46px 26px;
+    width: 100%; 
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    height: 100%;
+    padding: 5px;
+
+    img {
+      max-width: 100%;
+    }
+
+    .bottomCont {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 10px 0;
+      height: 100%;
+
+      .price {
+        margin-bottom: 10px;
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+  }
+
+  input, select {
+    width: 100%;
+    padding: 8px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+  }
+
+  input[type="text"]:focus, select:focus {
+    border-color:  #e8aa00;
+    outline: none;
+  }
+
+  .newCardForm {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto; 
+    text-align: center; 
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      font-family: $main-fonts;
+      font-weight: 600;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .adminPage {
+    padding: 10px;
+    // width: 50%;
+
+    .newCardForm {
+      padding: 2px;
+
+      input{
+        width: 60%;
+      }
+        select{
+          width: 68%;
+        }
+    }
+
+    .cardGrid {
+      grid-template-columns: 1fr; 
+      gap: 20px 10px;
+    }
+  }
+}

@@ -1,0 +1,30 @@
+@import '../../styles/styles.module.scss';
+
+
+.regionContent {
+    font-family: $main-fonts;
+    padding-bottom: 27.5px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .title {
+    font-size: 24px;
+    margin-bottom: 20px;
+
+  }
+  
+  .heading {
+    font-size: 20px;
+    margin-top: 20px;
+    padding: 5px;
+  }
+  
+  .text {
+    padding: 5px;
+    margin: 5px 0;
+  }
+  

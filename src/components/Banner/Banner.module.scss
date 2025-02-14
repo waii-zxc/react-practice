@@ -1,0 +1,168 @@
+@import '../../styles/styles.module.scss';
+
+.bunner {
+  display: flex;
+  justify-content: space-between;
+  padding: 24px 0px 16px;
+  width: 1280px;
+  // height: 84px;
+
+  .right {
+    font-family: $main-fonts;
+    display: flex;
+    position: relative;
+    align-items: center;
+    top: -10px;
+  }
+
+  .left {
+    font-family: $main-fonts;
+    display: flex;
+    position: relative;
+    align-items: center;
+    top: -10px;
+
+    .logo {
+      width: 180px;
+      cursor: pointer;
+      // height: 90px;
+      transition: transform 0.3s;
+      &:hover {
+        transform: translateY(-5px);
+      }
+    }
+
+    .sizeSection {
+      width: 220px;
+      padding-left: 36px;
+    }
+
+    .txt {
+      position: relative;
+      display: inline-block;
+      height: 21.59px;
+      font-weight: bold;
+      margin: 3px 0px;
+      padding: 0 5px;
+      gap: 10px;
+
+      &:nth-child(2) {
+        color: #ABABAB;
+        font-weight: 500;
+      }
+    }
+
+    .city {
+      position: relative;
+      display: inline-block;
+      justify-content: space-around;
+      color: $secondary-color;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 0;
+      transition: $transition-base;
+      &:hover {
+        color: #E86100;
+      }
+    }
+  }
+}
+
+.profileSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+
+  .profilePicture {
+    width: 50px;
+    border-radius: 50%;
+  }
+}
+
+@media (max-width: 1280px) {
+  .bunner {
+    width: 100%;
+    padding: 16px 10px;
+  }
+
+  .left .logo {
+    width: 150px;
+    // height: 68px;
+  }
+
+  .left .sizeSection {
+    width: 180px;
+    padding-left: 20px;
+  }
+
+  .left .txt {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 992px) {
+  .bunner {
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+  }
+
+  .left {
+    flex-direction: column;
+    align-items: center;
+
+    .logo {
+      width: 160px;
+      // height: 54px;
+    }
+
+    .sizeSection {
+      width: auto;
+      padding-left: 0;
+      text-align: center;
+    }
+
+    .txt {
+      margin: 2px 0;
+    }
+  }
+
+  .right {
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .bunner {
+    padding: 12px 5px;
+  }
+
+  .left .logo {
+    width: 100px;
+    // height: 45px;
+  }
+
+  .left .txt {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .bunner {
+    padding: 8px 0;
+  }
+
+  .left .logo {
+    width: 80px;
+    // height: 36px;
+  }
+
+  .left .txt {
+    font-size: 10px;
+  }
+
+  .profileSection .profilePicture {
+    width: 40px;
+  }
+}
