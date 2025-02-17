@@ -112,7 +112,7 @@ const transferGuestBasket = async (userId) => {
 
 export const getCardFromFirestore = async (cardId: string, category: string) => {
   if (!cardId || !category) {
-    throw new Error('Категория или ID не заданы'); // Вывод ошибки, если параметры не заданы
+    throw new Error('Категория или ID не заданы'); 
   }
 
   try {
@@ -120,7 +120,7 @@ export const getCardFromFirestore = async (cardId: string, category: string) => 
     const doc = await cardRef.get();
     if (doc.exists) {
       const cardData = doc.data();
-      console.log('Данные карты из Firebase:', cardData); // Логирование данных карты
+      console.log('Данные карты из Firebase:', cardData); 
       return cardData;
     } else {
       console.log('Документ не найден!');

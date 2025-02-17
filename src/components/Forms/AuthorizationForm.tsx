@@ -46,6 +46,8 @@ const AuthorizationForm = ({ onSuccess }) => {
   };
 
   const handlePasswordReset = async () => {
+    console.log('Функция handlePasswordReset вызвана');
+
     if (!email) {
       setError('Введите email для сброса пароля');
       toast.error('Введите email для сброса пароля');
@@ -53,18 +55,12 @@ const AuthorizationForm = ({ onSuccess }) => {
     }
 
     try {
-      const userDoc = await getDoc(doc(db, 'users', email));
-      if (!userDoc.exists()) {
-        setError('Пользователь с таким email не существует');
-        toast.error('Пользователь с таким email не существует');
-        return;
-      }
-
       await sendPasswordResetEmail(auth, email);
       toast.success('Письмо для сброса пароля отправлено на ваш email');
     } catch (error) {
       setError(`Ошибка при сбросе пароля: ${error.message}`);
       toast.error(`Ошибка при сбросе пароля: ${error.message}`);
+      console.error('Error during password reset:', error);
     }
   };
 
@@ -88,7 +84,6 @@ const AuthorizationForm = ({ onSuccess }) => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        {/* {error && <p className={styles.error}>{error}</p>} */}
         <Button className="ButtonReg" type="submit" text="Войти" />
         <Button className="ButtonSwap" text="Забыли пароль?" onClick={handlePasswordReset} />
       </form>
