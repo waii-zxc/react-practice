@@ -6,6 +6,7 @@ interface BasketItem {
   name: string;
   price: number;
   image: string;
+  quantity: number;
 }
 
 interface BasketState {
@@ -35,12 +36,22 @@ const basketSlice = createSlice({
   initialState,
   reducers: {
     addItem(state, action: PayloadAction<BasketItem>) {
-      state.items.push(action.payload);
+      const existingItem = state.items.find(item => item.id === action.payload.id && item.price === action.payload.price);
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        state.items.push({ ...action.payload, quantity: 1 });
+      }
       saveBasketToFirestore(state.items);
     },
-    removeItem(state, action: PayloadAction<string>) {
-      state.items = state.items.filter((item) => item.id !== action.payload);
-      saveBasketToFirestore(state.items); 
+    removeItem(state, action: PayloadAction<{ id: string; price: number }>) {
+      const existingItem = state.items.find(item => item.id === action.payload.id && item.price === action.payload.price);
+      if (existingItem && existingItem.quantity > 1) {
+        existingItem.quantity -= 1;
+      } else {
+        state.items = state.items.filter((item) => !(item.id === action.payload.id && item.price === action.payload.price));
+      }
+      saveBasketToFirestore(state.items);
     },
   },
   extraReducers: (builder) => {
@@ -51,7 +62,7 @@ const basketSlice = createSlice({
       })
       .addCase(clearBasket.fulfilled, (state) => {
         state.items = [];
-        saveBasketToFirestore(state.items); 
+        saveBasketToFirestore(state.items);
       });
   },
 });
